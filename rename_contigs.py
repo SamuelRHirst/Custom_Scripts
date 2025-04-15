@@ -1,4 +1,6 @@
-#The name of contigs from hifiasm aren't particularly useful. If I don't have a chromsome-level assembly, I still would like the contigs to be somewhat meaningful. So I will map my reference genome from hifiasm to a chromsome-level reference genome of a closely related species (if it exists) using RagTag. I then take the output AGP file from Ragtag to rename my assembly chromsomes to the mapping from Ragtag.
+#The name of contigs from hifiasm aren't particularly useful. If I don't have a chromsome-level assembly, I still would like the contig names to be meaningful.
+#So I will map my reference genome from hifiasm to a chromsome-level reference genome of a closely related species (if it exists) using RagTag. 
+#I then take the output AGP file from Ragtag to rename my assembly chromsomes to the mapping from Ragtag.
 
 import argparse
 from collections import defaultdict
