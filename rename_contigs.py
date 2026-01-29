@@ -17,19 +17,19 @@ def parse_agp(agp_file):
     with open(agp_file, 'r') as agp:
         for line in agp:
             if line.startswith("#") or not line.strip():
-                continue  # Skip comments or empty lines
+                continue  
 
             fields = line.strip().split("\t")
             chrom, contig_name = fields[0], fields[5]
 
-            if contig_name == "scaffold":  # Skip gap lines
+            if contig_name == "scaffold": 
                 continue
 
             if "RagTag" in chrom:
                 if chrom == "Mitochondrial_RagTag":
                     new_name = "Mitochondria"
                 else:
-                    chrom_num = chrom.split("_")[1]  # Extract chromosome number
+                    chrom_num = chrom.split("_")[1]  
                     chromosome_counts[chrom_num] += 1
                     new_name = f"Chr_{chrom_num.zfill(2)}_{str(chromosome_counts[chrom_num]).zfill(2)}"
             else:
@@ -48,7 +48,7 @@ def rename_fasta(fasta_file, agp_file, output_file="Renamed.fasta"):
 
     with open(output_file, "w") as out_fasta:
         for record in SeqIO.parse(fasta_file, "fasta"):
-            new_name = contig_mapping.get(record.id, record.id)  # Default to original if not found
+            new_name = contig_mapping.get(record.id, record.id)  
             out_fasta.write(f">{new_name}\n{str(record.seq)}\n")
 
     print(f"Renamed FASTA file saved as: {output_file}")
