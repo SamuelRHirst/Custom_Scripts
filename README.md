@@ -1,4 +1,4 @@
-# 🛠️ Custom Scripts
+#  Custom Scripts
 
 This repository contains small, purpose-built scripts — mostly written in Python — developed to support genomics and multi-omics workflows.
 
