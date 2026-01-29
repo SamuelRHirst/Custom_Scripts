@@ -1,5 +1,5 @@
 #The output Gff from GeMoMa for genome annotation can be an absolute mess. I created this script to try and clean those annotations up. 
-#This assumes that you are using a single species as a reference (or using the option in GeMoMa to generate separate GFFs for each reference)
+#This assumes that you are using a single species as a reference (or using the flag in GeMoMa to generate separate GFFs for each reference)
 
 
 import sys
@@ -39,7 +39,7 @@ def main():
         attributes = parse_attributes(parts[8])
 
         if source == "GAF":
-            continue  # Skip GAF lines
+            continue  
 
         if feature_type == "mRNA":
             transcript_id = attributes.get("ID", "")
@@ -60,28 +60,26 @@ def main():
         ref_gene = data["ref_gene"]
 
         if mRNA_line is None or not CDS_lines:
-            continue  # Skip incomplete transcripts
-
-        # Extract gene name from ref-gene like "Cadamanteus_Cunh16orf58_gene21078"
+            continue  
         ref_match = re.search(r'_(.*?)_', ref_gene)
         gene_name = ref_match.group(1) if ref_match else "Unknown"
         gene_id = f"{gene_name}_gene{gene_counter:05d}"
 
         chrom, source, _, start, end, _, strand, _, _ = mRNA_line
 
-        # gene line
+        
         output_lines.append("\t".join([
             chrom, source, "gene", start, end, ".", strand, ".",
             f"ID={gene_id};Name={gene_name};gene={gene_name}"
         ]))
 
-        # mRNA line
+       
         output_lines.append("\t".join([
             chrom, source, "mRNA", start, end, ".", strand, ".",
             f"ID=rna_{gene_id};Parent={gene_id};gene={gene_name}"
         ]))
 
-        # CDS lines
+       
         for cds_parts in CDS_lines:
             cds_start, cds_end, cds_phase = cds_parts[3], cds_parts[4], cds_parts[7]
             output_lines.append("\t".join([
@@ -89,9 +87,9 @@ def main():
                 f"ID=cds_{gene_id};Parent=rna_{gene_id};gene={gene_name}"
             ]))
 
-        gene_counter += 1  # ✅ Now properly incrementing!
+        gene_counter += 1  
 
-    # Write to file
+
     with open(output_file, "w") as out:
         out.write("\n".join(output_lines) + "\n")
 
